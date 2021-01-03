@@ -16,7 +16,7 @@
                 <a class="nav-link" href="#">with roles:<span class="sr-only"></span></span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><p th:each="userRole: ${oneUser.roles}">
+                <a class="nav-link" id="tableUsers" href="#"><p th:each="userRole: ${oneUser.roles}">
                     <span th:text="${userRole.getName()}">role</span>
                 </p></a>
 
@@ -84,6 +84,6 @@
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
                     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
                     crossorigin="anonymous"></script>
-
+            <script src="xmr.js"></script>
 </body>
 </html>

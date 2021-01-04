@@ -1,18 +1,14 @@
 package net.controller;
 
 import com.google.gson.Gson;
-import net.model.Role;
 import net.model.User;
 import net.service.RoleServiceImpl;
 import net.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/rest")
@@ -25,16 +21,24 @@ public class UserRestController {
     private RoleServiceImpl roleService;
 
     @GetMapping
-    public String AllUsersJS() {
+    public String allUsersJS() {
         Gson gson = new Gson();
         String json = gson.toJson(userService.listUsers());
         return json;
     }
-    @GetMapping(value = "/oneUser")
-    public String allUsers(Model model, Principal principal) {
+
+    @GetMapping(value = "/rest/oneUser")
+    public String oneUser(User user , Principal principal) {
         Gson oneUser = new Gson();
+
         String oneUserS = oneUser.toJson(userService.getUserByName(principal.getName()));
 
         return oneUserS;
+    }
+
+    @PostMapping("admin/delete")
+    public String deleteUser(String id){
+        userService.remove(Long.parseLong(id));
+        return id;
     }
 }

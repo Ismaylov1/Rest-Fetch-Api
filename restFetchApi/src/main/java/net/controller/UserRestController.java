@@ -5,12 +5,19 @@ import net.model.User;
 import net.service.RoleServiceImpl;
 import net.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/rest")
 public class UserRestController {
 
@@ -20,25 +27,24 @@ public class UserRestController {
     @Autowired
     private RoleServiceImpl roleService;
 
+    //    @GetMapping
+//    public Page<User> allUsersJS(Pageable pageable) {
+////        return userService.listUsersM(pageable);}
+
     @GetMapping
-    public String allUsersJS() {
-        Gson gson = new Gson();
-        String json = gson.toJson(userService.listUsers());
-        return json;
+    public ResponseEntity<List<User>> allUsersJS() {
+        return new ResponseEntity<>(userService.listUsers(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/rest/oneUser")
-    public String oneUser(User user , Principal principal) {
-        Gson oneUser = new Gson();
+    public ResponseEntity<User> oneUser(User user, Principal principal) {
 
-        String oneUserS = oneUser.toJson(userService.getUserByName(principal.getName()));
-
-        return oneUserS;
+        return new ResponseEntity<>(userService.getUserByName(principal.getName()), HttpStatus.OK);
     }
 
-    @PostMapping("admin/delete")
-    public String deleteUser(String id){
-        userService.remove(Long.parseLong(id));
-        return id;
+    @PostMapping("delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
+        userService.remove(id);
+        return id.toString();
     }
 }

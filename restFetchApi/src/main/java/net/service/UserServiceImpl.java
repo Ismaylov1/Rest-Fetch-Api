@@ -3,6 +3,8 @@ package net.service;
 import net.dao.RoleRepository;
 import net.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import net.model.User;
 import net.model.Role;
+
 
 import java.util.HashSet;
 import java.util.List;
@@ -62,7 +65,9 @@ public class UserServiceImpl implements UserDetailsService {
     public List<User> listUsers() {
         return userRepository.findAll();
     }
-
+    public Page<User> listUsersM(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
 
 
     @Override

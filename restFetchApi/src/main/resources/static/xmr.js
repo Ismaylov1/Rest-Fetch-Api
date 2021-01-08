@@ -11,7 +11,9 @@ const heading = document.getElementById('t1')
 // }
 const url = 'http://localhost:8087/rest'
 let users1
+
 async function getUsers() {
+
     let users = await fetch('http://localhost:8087/rest')
         .then(r => r.json())
         .then(async function array(users) {
@@ -25,7 +27,32 @@ async function getUsers() {
             }
         })
 }
-getUsers()
+
+getUsers();
+
+function fetchData(){
+    fetch('http://localhost:8087/rest')
+        .then(r => r.json()).then(data=>{
+            buildTable(data)
+    })
+}
+
+function buildTable(data) {
+    let table = document.getElementById('asd')
+    for (let i = 0; i < data.length; i++) {
+        let row = `<td>
+                        <td>${data[i].id}</td>
+                        <td>${data[i].username}</td>
+                        <td>${data[i].lastname}</td>
+                        <td>${data[i].age}</td>
+                        <td>${data[i].role}</td>
+                        <td>edit</td>
+                        <td>Del</td>
+                  </tr>   
+`
+        table.innerHTML+=row
+    }
+}
 
 // let usernamesJS = fetch(url)
 //     .then(r => r.json())

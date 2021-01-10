@@ -30,21 +30,30 @@ public class UserRestController {
     //    @GetMapping
 //    public Page<User> allUsersJS(Pageable pageable) {
 ////        return userService.listUsersM(pageable);}
-
     @GetMapping
-    public ResponseEntity<List<User>> allUsersJS() {
-        return new ResponseEntity<>(userService.listUsers(), HttpStatus.OK);
+    public String getUsers() {
+        Gson gson = new Gson();
+        String json = gson.toJson(userService.listUsers());
+        return json;
     }
+//    @GetMapping
+//    public ResponseEntity<List<User>> allUsersJS() {
+//        return new ResponseEntity<>(userService.listUsers(), HttpStatus.OK);
+//    }
 
     @GetMapping(value = "/rest/oneUser")
     public ResponseEntity<User> oneUser(User user, Principal principal) {
 
         return new ResponseEntity<>(userService.getUserByName(principal.getName()), HttpStatus.OK);
     }
+//    @PostMapping("admin/edit")
+//    public String editUser(String user, String roleID){
+//
+//    }
 
     @PostMapping("delete/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
-        userService.remove(id);
-        return id.toString();
+    public String deleteUser(@PathVariable("id") String id) {
+        userService.remove(Long.parseLong(id));
+        return id;
     }
 }

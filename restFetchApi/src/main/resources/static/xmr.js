@@ -1,10 +1,10 @@
-let row;
+
 
 function buildTable(data) {
     let table = document.getElementById('asd')
-
+    let row = '';
     for (let i = 0; i < data.length; i++) {
-        row = `<tr id="trTable">
+        row += `<tr id="trTable" data-whatever="${i}">
                         <td>${data[i].id}</td>
                         <td>${data[i].username}</td>
                         <td>${data[i].lastname}</td>
@@ -28,34 +28,27 @@ function buildTable(data) {
                        </td>
      </tr>                  
 `
-        table.innerHTML += row
+        table.innerHTML = row
     }
 }
 
 //отрисовка таблицы
-
-function fetchData() {              //запрос на рест с вызовом отрисовки таблицы
-    fetch('http://localhost:8087/rest')
-        .then(r => r.json()).then(data => {
-        buildTable(data)
-    })
-}
-
+getUsers().then(buildTable);
 async function getUsers() {         //получаем пользователей
-    let allUsers = {};
+    let data = {};
 
     try {
         const response = await fetch("http://localhost:8087/rest");
 
-        allUsers = await response.json();
+        data = await response.json();
     } catch (error) {
         console.error('Ошибка:', error);
     }
 
-    return allUsers;
+    return data;
 }
 
-fetchData()
+
 
 //   блок ллогики
 
@@ -72,8 +65,8 @@ async function tableDestroy() {
 
 
 function getRole(roles) {
-    var role = ""
-    for (var i = 0; i < roles.length; i++) {
+    let role = ""
+    for (let i = 0; i < roles.length; i++) {
         role += roles[i].name + " "
     }
     return role.substring(0, role.length - 1).replace(/ROLE_/g, '')
@@ -104,7 +97,7 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
     const button = $(event.relatedTarget); // Button that triggered the modal
     const i = button.data('whatever'); // Extract info from data-* attributes
     let userDelete = await getUsers();
-
+    let trTable = $("#trTable").data('whatever')
     const modalDelete = $(this);
 
     modalDelete.find(".modal-body #userIDSDel").val(userDelete[i].id)
@@ -121,20 +114,20 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
 
     buttonDelete.click(
         async function () {
-            let parent = $(this).closest("#trTable")
 
             try {
                 fetch('http://localhost:8087/rest/delete/' + modalDelete.find(".modal-body #userIDSDel").val(), {
                     method: 'POST',
                     dataType: "text",
                 })
-                    .then(res => res.text()) // or res.json()
+                    .then(res => res.text()).then(data => {
+                    getUsers().then(buildTable)
+                }) // or res.json()
             } catch (e) {
             } finally {
+                // trTable[i].remove()
                 await delay(100)
-                await tableDestroy()
-                await delay(200)
-                
+
             }
         }
     )
@@ -159,9 +152,6 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
 //
 //     }
 // )
-
-
-
 
 
 ////////////////ZZZZZZZZZZZZZZZZZZ\\\\\\\\\\\\\\\

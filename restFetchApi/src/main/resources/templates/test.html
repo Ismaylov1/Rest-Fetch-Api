@@ -9,32 +9,6 @@
 </head>
 <body>
 
-<div class="container">
-    <h1 class="text-center">Bootstrap - Демонстрация работы компонента modal</h1>
-    <hr>
-</div>
-<div class="container">
-
-
-    <p>2. Открытие модального окна с помощью JavaScript</p>
-    <p><a href="#myModal2" id="btn2" class="btn btn-primary">Открыть модальное окно 2</a></p>
-    <div id="myModal2" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Заголовок модального окна 2</h4>
-                </div>
-                <div class="modal-body">
-                    Содержимое модального окна 2...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                    <button type="button" class="btn btn-primary">Сохранить изменения</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -50,12 +24,8 @@
         integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
         crossorigin="anonymous"></script>
 
-<script>
-    $(function () {
-        $("#btn2").click(function () {
-            $("#myModal2").modal('show');
-        });
-    });
+<script src="xmr.js">
+
 </script>
 
 </body>

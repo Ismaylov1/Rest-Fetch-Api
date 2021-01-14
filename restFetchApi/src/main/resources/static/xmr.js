@@ -1,5 +1,3 @@
-
-
 function buildTable(data) {
     let table = document.getElementById('asd')
     let row = '';
@@ -34,6 +32,7 @@ function buildTable(data) {
 
 //отрисовка таблицы
 getUsers().then(buildTable);
+
 async function getUsers() {         //получаем пользователей
     let data = {};
 
@@ -49,18 +48,10 @@ async function getUsers() {         //получаем пользователе�
 }
 
 
-
 //   блок ллогики
 
 const delay = ms => {
     return new Promise(r => setTimeout(() => r(), ms))
-}
-
-
-async function tableDestroy() {
-    let parent = $("#trTable").remove()
-    await delay(200)
-
 }
 
 
@@ -72,23 +63,79 @@ function getRole(roles) {
     return role.substring(0, role.length - 1).replace(/ROLE_/g, '')
 }
 
+function rolesToJSON(roles) {
+    let jsonRoles = [];
+
+    function roleSet(id, name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    for (var i = 0; i < roles.options.length; i++) {
+        if (roles.options[i].selected) {
+            jsonRoles.push(new roleSet(roles.options[i].value, roles.options[i].text));
+        }
+    }
+
+    return jsonRoles;
+}
+
+
 //Edit Button Modal
 $('#myModal2').on('shown.bs.modal', async function (event) {
     const button = $(event.relatedTarget); // Button that triggered the modal
     const i = button.data('whatever'); // Extract info from data-* attributes
-    let userEdit = await getUsers();
+    let editElement =  await getUsers();
 
-    console.log(userEdit[i].roles)
 
     const modal = $(this);
-    modal.find(".modal-body #userIDS").val(userEdit[i].id);
-    modal.find(".modal-body #usernameID").val(userEdit[i].username);
-    modal.find(".modal-body #lastnameID").val(userEdit[i].lastname);
-    modal.find(".modal-body #ageID").val(userEdit[i].age);
-    modal.find(".modal-body #pswID").val(userEdit[i].password);
-    modal.find(".modal-body #roleEditID").val(getRole(userEdit[i].roles));
 
-});
+
+    modal.find(".modal-body #userIDS").val(editElement[i].id);
+    modal.find(".modal-body #usernameID").val(editElement[i].username);
+    modal.find(".modal-body #lastnameID").val(editElement[i].lastname);
+    modal.find(".modal-body #ageID").val(editElement[i].age);
+    modal.find(".modal-body #pswID").val(editElement[i].password);
+    modal.find(".modal-body #roleEditID").val(getRole(editElement[i].roles));
+    modal.find('.modal-body #DELroleEditID option').prop('selected', false);
+    for (let j = 0; j < editElement[i].roles.length; j++) {
+        modal.find('.modal-body #DELroleEditID option[value="' + editElement[i].roles[j].id + '"]').prop('selected', true);
+    }
+
+//Едит юзера\\
+    const buttonEdit = $("#editSubmit");
+
+    const putMethod = {
+        method: 'PUT',
+        body: JSON.stringify(
+            {
+
+                id: $("#userIDS").val(),
+                username: $("#usernameID").val(),
+                lastname: $("#lastnameID").val(),
+                password: $("#pswID").val(),
+                age: $("#ageID").val(),
+                roles: rolesToJSON($("#DELroleEditID")[0])
+            }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    buttonEdit.click(
+        async function () {
+            console.log(putMethod)
+
+            await fetch('http://localhost:8087/rest/put/' + modal.find(".modal-body #userIDS").val(), putMethod)
+                .then(response => response.json()).then(data => {
+                getUsers().then(buildTable)
+                .catch(err => console.log(err))
+
+
+        }
+    )
+});})
+
 
 //Delete Button Modal
 
@@ -97,7 +144,6 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
     const button = $(event.relatedTarget); // Button that triggered the modal
     const i = button.data('whatever'); // Extract info from data-* attributes
     let userDelete = await getUsers();
-    let trTable = $("#trTable").data('whatever')
     const modalDelete = $(this);
 
     modalDelete.find(".modal-body #userIDSDel").val(userDelete[i].id)
@@ -132,26 +178,6 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
         }
     )
 });
-
-// const buttonDelete = $("#delSubmit");
-// buttonDelete.click(
-//     function () {
-//         fetch('http://localhost:8087/rest/delete/', {
-//             method: 'POST',
-//             data: {id: $(this).attr("value")},
-//             dataType: "text",
-//             success: function (msg) {
-//                 $("#users")
-//                     .find("#" + msg) //ищем div с id=1
-//                     .remove();
-//             }
-//         })
-//             .then(res => res.text()) // or res.json()
-//             .then(res => console.log(res))
-//
-//
-//     }
-// )
 
 
 ////////////////ZZZZZZZZZZZZZZZZZZ\\\\\\\\\\\\\\\

@@ -1,4 +1,5 @@
 package net.controller;
+
 import com.google.gson.Gson;
 import net.model.User;
 import net.service.RoleServiceImpl;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 
 
@@ -43,23 +45,18 @@ public class UserRestController {
     }
 
     @PutMapping("/put/{id}")
-    User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
-        if (userService.getUserById(id).getId() == id) {
-            User oldUser = userService.getUserById(id);
-            oldUser.setUsername(newUser.getUsername());
-            oldUser.setLastname(newUser.getLastname());
-            oldUser.setPassword(newUser.getPassword());
-            oldUser.setAge(newUser.getAge());
-            oldUser.setRoles(newUser.getRoles());
-
-            return oldUser;
-        } else {
-            newUser.setId(id);
-            userService.add(newUser);
-            return newUser;
+    User updateUser(@RequestBody User newUser, @PathVariable Long id) {
+        newUser.setId(id);
+        if(newUser.getPassword().equals("")) {
+            newUser.setPassword(userService.getUserById(id).getPassword());
         }
+        return userService.updateUsers(newUser);
     }
 
+    public static void main(String[] args) {
+        User user = new User();
+        System.out.println(user.toString());
+    }
 
 //                .map(employee -> {
 //                    employee.setName(newEmployee.getName());

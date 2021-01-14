@@ -32,13 +32,14 @@ public class UserServiceImpl implements UserDetailsService {
 
 
 
-    public boolean add(User user) {
-        User userX = userRepository.findByUsername(user.getUsername());
-        if (userX !=null){
-            return false;
-        }
+    public User add(User user) {
+//        User userX = userRepository.findByUsername(user.getUsername());
+//        if (userX !=null){
+//            return false;
+//        }
         userRepository.save(user);
-        return true;
+        return user;
+//        return true;
     }
 
 

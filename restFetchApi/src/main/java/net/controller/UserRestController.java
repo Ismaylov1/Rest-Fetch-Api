@@ -47,15 +47,12 @@ public class UserRestController {
     @PutMapping("/put/{id}")
     User updateUser(@RequestBody User newUser, @PathVariable Long id) {
         newUser.setId(id);
-        if(newUser.getPassword().equals("")) {
+        if (newUser.getPassword().equals("")) {
             newUser.setPassword(userService.getUserById(id).getPassword());
+            return userService.updateUsers(newUser);
+        } else {
+            return userService.add(newUser);
         }
-        return userService.updateUsers(newUser);
-    }
-
-    public static void main(String[] args) {
-        User user = new User();
-        System.out.println(user.toString());
     }
 
 //                .map(employee -> {

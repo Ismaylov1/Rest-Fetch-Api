@@ -81,11 +81,12 @@ function rolesToJSON(roles) {
 }
 
 
-//Edit Button Modal
+//ОТРИСОВКА МОДАЛЬНОГО ОКНА EDIT
+
 $('#myModal2').on('shown.bs.modal', async function (event) {
     const button = $(event.relatedTarget); // Button that triggered the modal
     const i = button.data('whatever'); // Extract info from data-* attributes
-    let editElement =  await getUsers();
+    let editElement = await getUsers();
 
 
     const modal = $(this);
@@ -102,39 +103,46 @@ $('#myModal2').on('shown.bs.modal', async function (event) {
         modal.find('.modal-body #DELroleEditID option[value="' + editElement[i].roles[j].id + '"]').prop('selected', true);
     }
 
-//Едит юзера\\
-    const buttonEdit = $("#editSubmit");
-
-    const putMethod = {
-        method: 'PUT',
-        body: JSON.stringify(
-            {
-
-                id: $("#userIDS").val(),
-                username: $("#usernameID").val(),
-                lastname: $("#lastnameID").val(),
-                password: $("#pswID").val(),
-                age: $("#ageID").val(),
-                roles: rolesToJSON($("#DELroleEditID")[0])
-            }),
-        headers: {
-            'Content-Type': 'application/json'
+//EDIT USER
+    async function putEdit(bodyUser, idUser) {
+        const url = 'http://localhost:8087/rest/put/' + idUser
+        try {
+            const r = await fetch(url, {
+                method: 'PUT',
+                body: bodyUser,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            const json = await r.json();
+            console.log(JSON.stringify(json))
+        } catch (error) {
+            console.error(error)
         }
     }
 
-    buttonEdit.click(
-        async function () {
-            console.log(putMethod)
 
-            await fetch('http://localhost:8087/rest/put/' + modal.find(".modal-body #userIDS").val(), putMethod)
-                .then(response => response.json()).then(data => {
-                getUsers().then(buildTable)
-                .catch(err => console.log(err))
+    async function putMethod() {
 
 
+        const username = $("#usernameID").val()
+        const lastname = $("#lastnameID").val()
+        const password = $("#pswID").val()
+        const age = $("#ageID").val()
+        const roles = rolesToJSON($("#DELroleEditID")[0])
+        const id = $("#userIDS").val()
+        try {
+            await putEdit(JSON.stringify({username, lastname, password, age, roles}), id)
+        } catch (error) {
         }
+        getUsers().then(buildTable)
+    }
+
+    const buttonEdit = $("#editSubmit");
+    buttonEdit.click(
+        putMethod
     )
-});})
+})
 
 
 //Delete Button Modal
@@ -180,36 +188,3 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
 });
 
 
-////////////////ZZZZZZZZZZZZZZZZZZ\\\\\\\\\\\\\\\
-
-// $.ajax("http://localhost:8087/rest", {
-//     method: "DELETE",
-//     data: {id: $(this).attr("value")}, //в rest-контроллер будет передан id=1 (см. value из тэга button выше)
-//     dataType: "text",
-//     success: function (msg) {
-//         $("#users")
-//             .find("#" + msg) //ищем div с id=1
-//             .remove();
-//     }
-// })
-
-// event.preventDefault()
-// const href = $(this).attr('href')
-// var text = $(this).text()
-// if (text === 'Edit') {
-//     // $.get(href, function (country, status) { //main.js:14 Uncaught TypeError: $.get is not a function
-//
-//
-//
-//         $.isFunction(href, function (data) {
-//             $('.myForm #id').val(data.id)
-//             $('.myForm #username').val(data.username)
-//             $('.myForm #lastname').val(data.lastname)
-//         });}
-//     $('.myForm #exampleModal').modal()
-//  else {
-//     $('.myForm #id').val('')
-//     $('.myForm #username').val('')
-//     $('.myForm #lastname').val('')
-//     $('.myForm #exampleModal').modal()
-// }

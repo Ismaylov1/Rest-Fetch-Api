@@ -1,35 +1,3 @@
-function buildTable(data) {
-    let table = document.getElementById('asd')
-    let row = '';
-    for (let i = 0; i < data.length; i++) {
-        row += `<tr id="trTable" data-whatever="${i}">
-                        <td>${data[i].id}</td>
-                        <td>${data[i].username}</td>
-                        <td>${data[i].lastname}</td>
-                        <td>${data[i].age}</td>
-                        <td>${getRole(data[i].roles)}</td>
-
-                        <td>   
-                          
-                              <button class="btn btn-info eBtn" id="btn2" data-toggle="modal" 
-                              data-target="#myModal2" type="button" 
-                              data-whatever="${i}" >Edit
-                              </button>
-                          
-                        </td>               
-                        <td>
-  
-                             <button id="delBtn" type="button" name="id"  class="btn btn-danger"
-                                 data-toggle="modal" data-target="#myModalDelete"
-                                 data-whatever="${i}">Delete
-                             </button> 
-                       </td>
-     </tr>                  
-`
-        table.innerHTML = row
-    }
-}
-
 //ОТРИСОВКА ТАБЛИЦЫ
 getUsers().then(buildTable);
 
@@ -47,8 +15,22 @@ async function getUsers() {         //получаем пользователе�
     return data;
 }
 
+getAuthUser().then(buildUserTable)
+getAuthUser().then(getTitleNigga)
 
+async function getAuthUser() {         //получаем 1 пользователя
+    let dataAuth = {};
 
+    try {
+        const response = await fetch("http://localhost:8087/rest/oneUser");
+
+        dataAuth = await response.json();
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+
+    return dataAuth;
+}
 
 
 //ДЕЛЭЙ
@@ -153,7 +135,7 @@ btnADD.click(
     createUser
 )
 
-async function createUser(){
+async function createUser() {
 
     const username = $("#userNameADD").val()
     const lastname = $("#lastNameADD").val()
@@ -166,12 +148,9 @@ async function createUser(){
         await addUser(JSON.stringify({username, lastname, password, age, roles}))
     } catch (error) {
     }
-
-
-
 }
 
-async function addUser(userRequest){
+async function addUser(userRequest) {
     const url = 'http://localhost:8087/rest/add'
     console.log(userRequest);
 
@@ -191,7 +170,6 @@ async function addUser(userRequest){
     }
     getUsers().then(buildTable)
 }
-
 
 
 //Delete Button Modal
@@ -215,27 +193,85 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
 // Удаление персоны
     const buttonDelete = $("#delSubmit");
 
-    buttonDelete.click(
-        async function () {
+buttonDelete.click(
+    async function () {
 
-            try {
-                fetch('http://localhost:8087/rest/delete/' + modalDelete.find(".modal-body #userIDSDel").val(), {
-                    method: 'POST',
-                    dataType: "text",
-                })
-                    .then(res => res.text()).then(data => {
-                    getUsers().then(buildTable)
-                }) // or res.json()
-            } catch (e) {
-            } finally {
-                // trTable[i].remove()
-                await delay(100)
+        try {
+            fetch('http://localhost:8087/rest/delete/' + modalDelete.find(".modal-body #userIDSDel").val(), {
+                method: 'POST',
+                dataType: "text",
+            })
+                .then(res => res.text()).then(data => {
+                getUsers().then(buildTable)
+            }) // or res.json()
+        } catch (e) {
+        } finally {
+            // trTable[i].remove()
+            await delay(100)
 
-            }
         }
-    )
-});
+    }
+)});
 
+//РАЗДЕЛ ТАБЛИЦ
+function buildTable(data) {
+    let table = document.getElementById('asd')
+    let row = '';
+    for (let i = 0; i < data.length; i++) {
+        row += `<tr id="trTable" data-whatever="${i}">
+                        <td>${data[i].id}</td>
+                        <td>${data[i].username}</td>
+                        <td>${data[i].lastname}</td>
+                        <td>${data[i].age}</td>
+                        <td>${getRole(data[i].roles)}</td>
+
+                        <td>   
+                          
+                              <button class="btn btn-info eBtn" id="btn2" data-toggle="modal" 
+                              data-target="#myModal2" type="button" 
+                              data-whatever="${i}" >Edit
+                              </button>
+                          
+                        </td>               
+                        <td>
+  
+                             <button id="delBtn" type="button" name="id"  class="btn btn-danger"
+                                 data-toggle="modal" data-target="#myModalDelete"
+                                 data-whatever="${i}">Delete
+                             </button> 
+                       </td>
+     </tr>                  
+`
+        table.innerHTML = row
+    }
+}
+
+function buildUserTable(dataAuth) {
+    let table = document.getElementById('authUser')
+    let userRow = '';
+    console.log(getRole(dataAuth.roles))
+    userRow = `<tr>
+                        <td>${dataAuth.id}</td>
+                        <td>${dataAuth.username}</td>
+                        <td>${dataAuth.lastname}</td>
+                        <td>${dataAuth.age}</td>
+                        <td>${dataAuth.password}</td>
+                        <td>${getRole(dataAuth.roles)}</td>
+     </tr>                  
+`
+    table.innerHTML = userRow
+}
+
+function getTitleNigga(dataAuth) {
+    let titleRole = document.getElementById('titleHustler')
+    let userRole = ` <span>${getRole(dataAuth.roles)}</span> `
+    titleRole.innerHTML = userRole
+
+    let titleName = document.getElementById('topLeftTitle')
+    let userNIck = `<p>${dataAuth.username}</p>
+    `
+    titleName.innerHTML = userNIck
+}
 
 
 

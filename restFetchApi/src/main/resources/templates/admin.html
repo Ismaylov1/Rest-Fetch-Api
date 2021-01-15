@@ -9,15 +9,16 @@
 </head>
 <body class="bg-light">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#"><p th:text="${oneUser.username}"></p></a>
+    <a class="navbar-brand" href="#" id="topLeftTitle"><p></p></a>
     <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="#">with roles:<span class="sr-only"></span></span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><p th:each="userRole: ${oneUser.roles}">
-                    <span th:text="${userRole.getName()}">role</span>
+<!--                Title-->
+                <a class="nav-link" href="#"><p id="titleHustler">
+                    <span>role</span>
                 </p></a>
 
             </li>
@@ -300,16 +301,16 @@
                         <th>Role</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="authUser">
 
-                        <td th:text="${oneUser.getId()}"></td>
-                        <td th:text="${oneUser.username}"></td>
-                        <td th:text="${oneUser.lastname}"></td>
-                        <td th:text="${oneUser.age}"></td>
-                        <td th:text="${oneUser.password}"></td>
-                        <td>
-                            <span th:text="${#strings.listJoin(oneUser.getRoleFiltered(), ', ')}">role</span>
-                        </td>
+<!--                        <td th:text="${oneUser.getId()}"></td>-->
+<!--                        <td th:text="${oneUser.username}"></td>-->
+<!--                        <td th:text="${oneUser.lastname}"></td>-->
+<!--                        <td th:text="${oneUser.age}"></td>-->
+<!--                        <td th:text="${oneUser.password}"></td>-->
+<!--                        <td>-->
+<!--                            <span th:text="${#strings.listJoin(oneUser.getRoleFiltered(), ', ')}">role</span>-->
+<!--                        </td>-->
                         </tbody>
                     </table>
 

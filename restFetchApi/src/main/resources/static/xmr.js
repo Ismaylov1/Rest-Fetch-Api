@@ -30,7 +30,7 @@ function buildTable(data) {
     }
 }
 
-//отрисовка таблицы
+//ОТРИСОВКА ТАБЛИЦЫ
 getUsers().then(buildTable);
 
 async function getUsers() {         //получаем пользователей
@@ -48,13 +48,16 @@ async function getUsers() {         //получаем пользователе�
 }
 
 
-//   блок ллогики
+
+
+
+//ДЕЛЭЙ
 
 const delay = ms => {
     return new Promise(r => setTimeout(() => r(), ms))
 }
 
-
+//РЕНДЕР РОЛИ
 function getRole(roles) {
     let role = ""
     for (let i = 0; i < roles.length; i++) {
@@ -144,6 +147,52 @@ $('#myModal2').on('shown.bs.modal', async function (event) {
     )
 })
 
+//КРИЕЙТ НОВЫЙ ЧЕЛОВЕК
+const btnADD = $("#buttonOfCreation")
+btnADD.click(
+    createUser
+)
+
+async function createUser(){
+
+    const username = $("#userNameADD").val()
+    const lastname = $("#lastNameADD").val()
+    const password = $("#pswADD").val()
+    const age = $("#ageADD").val()
+    const roles = rolesToJSON($("#role")[0])
+
+    try {
+        await $('.userTable a[href="#nav-usersTable"]').tab('show')
+        await addUser(JSON.stringify({username, lastname, password, age, roles}))
+    } catch (error) {
+    }
+
+
+
+}
+
+async function addUser(userRequest){
+    const url = 'http://localhost:8087/rest/add'
+    console.log(userRequest);
+
+    try {
+        const r = await fetch(url, {
+            method: 'POST',
+            body: userRequest,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const json = await r.json();
+
+        console.log(JSON.stringify(json))
+    } catch (error) {
+        console.error(error)
+    }
+    getUsers().then(buildTable)
+}
+
+
 
 //Delete Button Modal
 
@@ -186,5 +235,7 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
         }
     )
 });
+
+
 
 

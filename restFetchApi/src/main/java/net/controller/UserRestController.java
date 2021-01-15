@@ -31,7 +31,7 @@ public class UserRestController {
     }
 
 
-    @GetMapping(value = "/rest/oneUser")
+    @GetMapping(value = "/oneUser")
     public ResponseEntity<User> oneUser(User user, Principal principal) {
 
         return new ResponseEntity<>(userService.getUserByName(principal.getName()), HttpStatus.OK);
@@ -44,26 +44,23 @@ public class UserRestController {
         return id;
     }
 
+    @PostMapping("/add")
+    User saveUser(@RequestBody User newUser) {
+        return userService.add(newUser);
+    }
+
     @PutMapping("/put/{id}")
-    User updateUser(@RequestBody User newUser, @PathVariable Long id) {
-        newUser.setId(id);
-        if (newUser.getPassword().equals("")) {
-            newUser.setPassword(userService.getUserById(id).getPassword());
-            return userService.updateUsers(newUser);
+    User updateUser(@RequestBody User updateUser, @PathVariable Long id) {
+        updateUser.setId(id);
+        if (updateUser.getPassword().equals("")) {
+            updateUser.setPassword(userService.getUserById(id).getPassword());
+            return userService.updateUsers(updateUser);
         } else {
-            return userService.add(newUser);
+            return userService.add(updateUser);
         }
     }
 
-//                .map(employee -> {
-//                    employee.setName(newEmployee.getName());
-//                    employee.setRole(newEmployee.getRole());
-//                    return repository.save(employee);
-//                })
-//                .orElseGet(() -> {
-//                    newEmployee.setId(id);
-//                    return repository.save(newEmployee);
-//                });
+
 
 
 }

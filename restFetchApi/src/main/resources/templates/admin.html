@@ -44,8 +44,8 @@
                      aria-labelledby="v-pills-admin-tab">
                     <h1>Admin table</h1>
                     <nav>
-                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab"
+                        <div class="nav nav-tabs mainShit" id="main" role="tablist">
+                            <a class="nav-item nav-link active userTable" id="nav-home-tab" data-toggle="tab"
                                href="#nav-usersTable" role="tab" aria-controls="nav-home" aria-selected="true">
                                 Users table</a>
                             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
@@ -237,44 +237,43 @@
                                                         <strong>First Name</strong><br>
                                                         <input class="form-control"
                                                                type="text" name="username"
-                                                               th:value="*{username}">
+                                                               id="userNameADD">
                                                     </div>
 
                                                     <div class="text-center">
                                                         <strong>LastName</strong>
                                                         <input class="form-control"
                                                                type="text" name="lastname"
-                                                               th:value="${lastname}">
+                                                               id="lastNameADD"
+                                                               >
                                                     </div>
                                                     <div class="text-center">
                                                         <strong>Age</strong>
                                                         <input class="form-control"
                                                                type="number" name="age"
-                                                               th:value="${age}">
+                                                               id="ageADD"
+                                                               >
                                                     </div>
                                                     <div class="text center">
                                                         <strong>Password</strong><br>
                                                         <input class="form-control"
                                                                type="password" name="password"
-                                                               th:value="*{password}">
+                                                               id="pswADD">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-form-label"
-                                                               th:for="role">Role</label>
+                                                               >Role</label>
                                                         <select class="custom-select form-control"
-                                                                th:id="role" name="newRoles" multiple>
-                                                            <option
-                                                                    th:each="s: ${listRole}"
-                                                                    th:value="${s.getName()}"
-                                                                    th:selected="${s.getName() == 'ROLE_USER'}"
-                                                                    th:text="${s.getName()}">
-                                                            </option>
+                                                                id="role" name="newRoles" multiple required >
+                                                            <option value="1" >ROLE_HR</option>
+                                                            <option value="2">ROLE_ADMIN</option>
+                                                            <option value="3">ROLE_USER</option>
                                                         </select>
                                                     </div>
                                                 </div>
 
                                                 <div>
-                                                    <button type="button submit" class="btn btn-success">Add new
+                                                    <button type="button submit" class="btn btn-success" id="buttonOfCreation">Add new
                                                         user
                                                     </button>
                                                 </div>

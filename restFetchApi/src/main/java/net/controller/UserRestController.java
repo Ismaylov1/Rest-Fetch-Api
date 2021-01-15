@@ -32,9 +32,9 @@ public class UserRestController {
 
 
     @GetMapping(value = "/oneUser")
-    public ResponseEntity<User> oneUser(User user, Principal principal) {
+    public User oneUser(User user, Principal principal) {
 
-        return new ResponseEntity<>(userService.getUserByName(principal.getName()), HttpStatus.OK);
+        return userService.getUserByName(principal.getName());
     }
 
 

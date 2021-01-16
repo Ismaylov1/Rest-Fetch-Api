@@ -30,6 +30,7 @@ function getTitleNiggaPage(dataAuth) {
     `
     titleName.innerHTML = userNIck
 }
+
 getAuthUserPage().then(getTitleNiggaPage)
 getAuthUserPage().then(buildUserTablePage)
 

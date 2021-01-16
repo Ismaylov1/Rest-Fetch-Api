@@ -15,8 +15,8 @@ async function getUsers() {         //получаем пользователе�
     return data;
 }
 
-getAuthUser().then(buildUserTable)
-getAuthUser().then(getTitleNigga)
+getAuthUser().then(buildUserTable)  // ВЫЗОВ ТАБЫ АВТОРИЗОВАННОГО ЮЗЕРА
+getAuthUser().then(getTitleNigga)   // ЛЕВАЯ ВЕРХНЯЯ НАДПИСЬ
 
 async function getAuthUser() {         //получаем 1 пользователя
     let dataAuth = {};

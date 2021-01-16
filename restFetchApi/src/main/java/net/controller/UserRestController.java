@@ -44,7 +44,7 @@ public class UserRestController {
         return id;
     }
 
-    @PostMapping("/add")
+    @PutMapping("/add")
     User saveUser(@RequestBody User newUser) {
         return userService.add(newUser);
     }

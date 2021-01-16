@@ -128,12 +128,25 @@ $('#myModal2').on('shown.bs.modal', async function (event) {
         putMethod
     )
 })
-
 //КРИЕЙТ НОВЫЙ ЧЕЛОВЕК
-const btnADD = $("#buttonOfCreation")
-btnADD.click(
-    createUser
-)
+document.getElementById('buttonOfCreation').addEventListener('click', function (e) {
+    e.preventDefault()
+    linkClick()
+
+})
+
+function linkClick() {
+    createUser().then(r => addUser(r))
+    cleanForm()
+    $('.mainShit a[href="#nav-usersTable"]').tab('show')
+}
+
+function cleanForm() {
+    $("#userNameADD").val('')
+    $("#lastNameADD").val('')
+    $("#pswADD").val('')
+    $("#ageADD").val('')
+}
 
 async function createUser() {
 
@@ -144,7 +157,7 @@ async function createUser() {
     const roles = rolesToJSON($("#role")[0])
 
     try {
-        await $('.userTable a[href="#nav-usersTable"]').tab('show')
+        $('.mainShit a[href="#nav-usersTable"]').tab('show')
         await addUser(JSON.stringify({username, lastname, password, age, roles}))
     } catch (error) {
     }
@@ -156,7 +169,7 @@ async function addUser(userRequest) {
 
     try {
         const r = await fetch(url, {
-            method: 'POST',
+            method: 'PUT',
             body: userRequest,
             headers: {
                 'Content-Type': 'application/json'
@@ -166,6 +179,7 @@ async function addUser(userRequest) {
 
         console.log(JSON.stringify(json))
     } catch (error) {
+        $('.mainShit a[href="#nav-usersTable"]').tab('showMain')
         console.error(error)
     }
     getUsers().then(buildTable)
@@ -193,25 +207,26 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
 // Удаление персоны
     const buttonDelete = $("#delSubmit");
 
-buttonDelete.click(
-    async function () {
+    buttonDelete.click(
+        async function () {
 
-        try {
-            fetch('http://localhost:8087/rest/delete/' + modalDelete.find(".modal-body #userIDSDel").val(), {
-                method: 'POST',
-                dataType: "text",
-            })
-                .then(res => res.text()).then(data => {
-                getUsers().then(buildTable)
-            }) // or res.json()
-        } catch (e) {
-        } finally {
-            // trTable[i].remove()
-            await delay(100)
+            try {
+                fetch('http://localhost:8087/rest/delete/' + modalDelete.find(".modal-body #userIDSDel").val(), {
+                    method: 'POST',
+                    dataType: "text",
+                })
+                    .then(res => res.text()).then(data => {
+                    getUsers().then(buildTable)
+                }) // or res.json()
+            } catch (e) {
+            } finally {
+                // trTable[i].remove()
+                await delay(100)
 
+            }
         }
-    }
-)});
+    )
+});
 
 //РАЗДЕЛ ТАБЛИЦ
 function buildTable(data) {
@@ -245,7 +260,7 @@ function buildTable(data) {
         table.innerHTML = row
     }
 }
-
+//Заполнение авторизованного юзера
 function buildUserTable(dataAuth) {
     let table = document.getElementById('authUser')
     let userRow = '';

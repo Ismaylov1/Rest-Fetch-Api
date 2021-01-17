@@ -40,7 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/login").not().fullyAuthenticated()
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/user/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-//                .anyRequest().not().access("hasRole('ROLE_USER')")
                 .and()
                 .formLogin()
                 .successHandler(loginSuccessHandler);

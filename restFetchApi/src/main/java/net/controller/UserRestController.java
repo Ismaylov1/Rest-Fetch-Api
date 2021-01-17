@@ -39,9 +39,9 @@ public class UserRestController {
 
 
     @PostMapping("delete/{id}")
-    public String deleteUser(@PathVariable("id") String id) {
-        userService.remove(Long.parseLong(id));
-        return id;
+    public String deleteUser(@PathVariable("id") Long id) {
+        userService.remove(id);
+        return id.toString();
     }
 
     @PutMapping("/add")

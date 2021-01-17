@@ -56,7 +56,7 @@ function rolesToJSON(roles) {
         this.name = name;
     }
 
-    for (var i = 0; i < roles.options.length; i++) {
+    for (let i = 0; i < roles.options.length; i++) {
         if (roles.options[i].selected) {
             jsonRoles.push(new roleSet(roles.options[i].value, roles.options[i].text));
         }
@@ -200,7 +200,9 @@ $('#myModalDelete').on('shown.bs.modal', async function (event) {
     modalDelete.find(".modal-body #lastnameIDDel").val(userDelete[i].lastname)
     modalDelete.find(".modal-body #ageIDDel").val(userDelete[i].age)
     modalDelete.find(".modal-body #passwordIDDel").val(userDelete[i].password)
-    modalDelete.find(".modal-body #roleEditIDDEL").val(getRole(userDelete[i].roles))
+    for (let j = 0; j < userDelete[i].roles.length; j++) {
+        modalDelete.find('.modal-body #roleEditIDDEL option[value="' + userDelete[i].roles[j].id + '"]').prop('selected', true);
+    }
     console.log(modalDelete.find(".modal-body #userIDSDel").val())
 
 

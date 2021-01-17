@@ -8,12 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import net.model.Role;
 import net.model.User;
-
-
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @RequestMapping(value = "/")
 @Controller
